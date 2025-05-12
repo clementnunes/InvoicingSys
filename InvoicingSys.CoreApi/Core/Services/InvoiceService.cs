@@ -3,19 +3,14 @@ using InvoicingSys.CoreApi.Core.Entities;
 
 namespace InvoicingSys.CoreApi.Core.Services;
 
-public class InvoicingService
+public class InvoiceService
 {
     private readonly ApplicationDbContext _context;
     
-    public InvoicingService(ApplicationDbContext context)
+    public InvoiceService(ApplicationDbContext context)
     {
         _context = context;
     }
-    
-    public Order? _order = default!;
-    public DateTime? _dueDate = default!;
-    public DateTime? _invoicingDate = default!;
-    public BankDetail? _bankDetail = default!;
     
     public Invoice CreateInvoice(Order? order, DateTime? dueDate, BankDetail? bankDetail)
     {
