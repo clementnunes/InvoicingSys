@@ -67,15 +67,17 @@ public class OrderLineController : ControllerBase
         OrderLine? orderLine;
         Product? product;
         var orderLines = new List<OrderLine>();
+
+        var orderLineBlueprints = body as OrderLineBlueprint[] ?? body.ToArray();
         
-        List<Error> errors = _orderLineService.CheckOrderLines(body);
+        List<Error> errors = _orderLineService.CheckOrderLines(orderLineBlueprints);
 
         if (errors.Count > 0)
             return BadRequest(errors);
         
-        _orderLineService.ValidateOrderLines(body);
+        _orderLineService.ValidateOrderLines(orderLineBlueprints);
         
-        foreach (var orderLineBlueprint in body)
+        foreach (var orderLineBlueprint in orderLineBlueprints)
         {
             if (orderLineBlueprint.BoughtProduct is null || orderLineBlueprint.BoughtProduct.Id is null)
                 throw new BadHttpRequestException("Invalid bought product");

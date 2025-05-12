@@ -92,6 +92,7 @@ public class OrderLineService
     {
         return _context.OrderLines
             .Include(o => o.BoughtProduct)
+            .ThenInclude(boughtProduct => boughtProduct.VatTax)
             .ToList();
     }
 
@@ -99,6 +100,7 @@ public class OrderLineService
     {
         return _context.OrderLines
             .Include(o => o.BoughtProduct)
+            .ThenInclude(boughtProduct => boughtProduct.VatTax)
             .FirstOrDefault(i => i.Id == orderLineId);
     }
     

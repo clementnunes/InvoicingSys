@@ -58,6 +58,12 @@ public class InvoiceService
     {
         return _context.Invoices
             .Include(i => i.Order)
+            .ThenInclude(order => order.OrderLines)
+            .ThenInclude(orderLine => orderLine.BoughtProduct)
+            .ThenInclude(boughtProduct => boughtProduct.VatTax)
+            .Include(i => i.Order)
+            .ThenInclude(order => order.Customer)
+            .ThenInclude(order => order.Address)
             .Include(i => i.BankDetail)
             .ToList();
     }
@@ -66,6 +72,12 @@ public class InvoiceService
     {
         return _context.Invoices
             .Include(i => i.Order)
+            .ThenInclude(order => order.OrderLines)
+            .ThenInclude(orderLine => orderLine.BoughtProduct)
+            .ThenInclude(boughtProduct => boughtProduct.VatTax)
+            .Include(i => i.Order)
+            .ThenInclude(order => order.Customer)
+            .ThenInclude(order => order.Address)
             .Include(i => i.BankDetail)
             .FirstOrDefault(i => i.Id == invoiceId);
     }

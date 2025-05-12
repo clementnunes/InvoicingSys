@@ -1,5 +1,6 @@
 ﻿using InvoicingSys.CoreApi.Core.DataContext.DBContexts;
 using InvoicingSys.CoreApi.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace InvoicingSys.CoreApi.Core.Services;
 
@@ -52,11 +53,11 @@ public class ProductService
 
     public List<Product> GetProducts()
     {
-        return _context.Products.ToList();
+        return _context.Products.Include(p => p.VatTax).ToList();
     }
 
     public Product? GetProductById(Guid productId)
     {
-        return _context.Products.FirstOrDefault(i => i.Id == productId);
+        return _context.Products.Include(p => p.VatTax).FirstOrDefault(i => i.Id == productId);
     }
 }

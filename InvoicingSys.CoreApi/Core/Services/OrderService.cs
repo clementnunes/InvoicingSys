@@ -75,16 +75,22 @@ public class OrderService
     public List<Order> GetOrders()
     {
         return _context.Orders
-            .Include(o => o.OrderLines)
             .Include(o => o.Customer)
+            .ThenInclude(customer => customer.Address)
+            .Include(o => o.OrderLines)
+            .ThenInclude(orderLine => orderLine.BoughtProduct)
+            .ThenInclude(boughtProduct => boughtProduct.VatTax)
             .ToList();
     }
 
     public Order? GetOrderById(Guid orderId)
     {
         return _context.Orders
-            .Include(o => o.OrderLines)
             .Include(o => o.Customer)
+            .ThenInclude(customer => customer.Address)
+            .Include(o => o.OrderLines)
+            .ThenInclude(orderLine => orderLine.BoughtProduct)
+            .ThenInclude(boughtProduct => boughtProduct.VatTax)
             .FirstOrDefault(i => i.Id == orderId);
     }
 }
