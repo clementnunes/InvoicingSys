@@ -33,6 +33,8 @@ public class OrderController : ControllerBase
         if (body.OrderLines is null || body.OrderLines.Count <= 0) 
             return BadRequest("OrderLines is null, please add at least one line");
         if (body.Customer is null || body.Customer.Id is null) return BadRequest("Customer is null or CustomerId is null");
+        
+        _orderLineService.ValidateOrderLines(body.OrderLines);
 
         try
         {
@@ -42,7 +44,7 @@ public class OrderController : ControllerBase
         catch (Exception e)
         {
             if (e is ArgumentNullException)
-                return BadRequest();
+                return BadRequest(e.Message);
 
             Console.WriteLine(e);
             throw;

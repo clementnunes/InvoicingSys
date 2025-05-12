@@ -49,6 +49,7 @@ public class CustomerController : ControllerBase
             }
             
             customer = _customerService.CreateCustomer(
+                body.Code,
                 body.FirstName, 
                 body.LastName, 
                 body.Email, 
@@ -58,7 +59,7 @@ public class CustomerController : ControllerBase
         catch (Exception e)
         {
             if (e is ArgumentNullException)
-                return BadRequest();
+                return BadRequest(e.Message);
 
             Console.WriteLine(e);
             throw;
@@ -98,6 +99,7 @@ public class CustomerController : ControllerBase
                 }
             
                 customer = _customerService.CreateCustomer(
+                    customerBlueprint.Code,
                     customerBlueprint.FirstName, 
                     customerBlueprint.LastName, 
                     customerBlueprint.Email, 
@@ -109,7 +111,7 @@ public class CustomerController : ControllerBase
             catch (Exception e)
             {
                 if (e is ArgumentNullException)
-                    return BadRequest();
+                    return BadRequest(e.Message);
 
                 Console.WriteLine(e);
                 throw;
@@ -141,7 +143,7 @@ public class CustomerController : ControllerBase
         var customer = _customerService.GetCustomerById(customerId);
 
         if (customer is null)
-            return NotFound();
+            return NotFound("Customer not found");
 
         return customer;
     }

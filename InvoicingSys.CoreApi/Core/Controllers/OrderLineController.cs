@@ -34,6 +34,8 @@ public class OrderLineController : ControllerBase
         if (body.BoughtProduct is null || body.BoughtProduct.Id is null)
             throw new BadHttpRequestException("Invalid bought product");
 
+        _orderLineService.ValidateOrderLine(body);
+
         try
         {
             product = _productService.GetProductById((Guid) body.BoughtProduct.Id);
@@ -70,6 +72,8 @@ public class OrderLineController : ControllerBase
 
         if (errors.Count > 0)
             return BadRequest(errors);
+        
+        _orderLineService.ValidateOrderLines(body);
         
         foreach (var orderLineBlueprint in body)
         {

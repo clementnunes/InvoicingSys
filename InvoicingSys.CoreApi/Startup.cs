@@ -42,7 +42,7 @@ namespace InvoicingSys.CoreApi
             }
             
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
-
+            
             /*services.AddCors(options =>
             {
                 options.AddPolicy(name: "InvoicingSysCORSPolicy",

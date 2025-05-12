@@ -12,8 +12,12 @@ public class CustomerService
         _context = context;
     }
     
-    public Customer CreateCustomer(string? firstName, string? lastName,  string? email, string? phoneNumber, Address? address)
+    public Customer CreateCustomer(string? code, string? firstName, string? lastName,  
+        string? email, string? phoneNumber, Address? address)
     {
+        if (code is null)
+            throw new ArgumentNullException(nameof(code), "Code cannot be null");
+        
         if (firstName is null)
             throw new ArgumentNullException(nameof(firstName), "First name cannot be null");
         
@@ -29,16 +33,19 @@ public class CustomerService
         if (address is null)
             throw new ArgumentNullException(nameof(address), "Address cannot be null");
 
-        Customer customer = new Customer(firstName, lastName, email, phoneNumber, address);
+        Customer customer = new Customer(code, firstName, lastName, email, phoneNumber, address);
         
         _context.Customers.Add(customer);
         _context.SaveChanges();
         return customer;
     }
     
-    public Customer ModifyCustomer(Customer customer, string? firstName, string? lastName,  
+    public Customer ModifyCustomer(Customer customer, string? code, string? firstName, string? lastName,  
                                     string? email, string? phoneNumber, Address? address)
     {
+        if(code is not null)
+            customer.Code = code;
+            
         if(firstName is not null)
             customer.FirstName = firstName;
         

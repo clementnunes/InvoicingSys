@@ -88,9 +88,10 @@ public class Customer
         _id = Guid.NewGuid();
     }
     
-    public Customer(string? firstName, string? lastName, string? email, string? phoneNumber, Address? address)
+    public Customer(string? code, string? firstName, string? lastName, string? email, string? phoneNumber, Address? address)
     {
         _id = Guid.NewGuid();
+        _code = code;
         _firstName = firstName;
         _lastName = lastName;
         _email = email;
