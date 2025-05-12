@@ -27,6 +27,7 @@ namespace InvoicingSys.CoreApi
             services.AddTransient<ProductService>();
             services.AddTransient<BankDetailService>();
             services.AddTransient<InvoiceService>();
+            services.AddTransient<VatTaxService>();
             
             var connectionString = $"Host={Env.GetString("POSTGRES_HOST")};" +
                                    $"Port={Env.GetString("POSTGRES_PORT")};" +

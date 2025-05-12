@@ -85,4 +85,25 @@ public class CustomerService
             .Include(c => c.Address)
             .FirstOrDefault(i => i.Id == customerId);
     }
+    
+    public Customer? GetCustomerByCode(string code)
+    {
+        return _context.Customers
+            .Include(c => c.Address)
+            .FirstOrDefault(i => i.Code == code);
+    }
+    
+    public Customer? GetCustomerByEmail(string email)
+    {
+        return _context.Customers
+            .Include(c => c.Address)
+            .FirstOrDefault(i => i.Email == email);
+    }
+    
+    public Customer? GetCustomerByAddressId(Guid addressId)
+    {
+        return _context.Customers
+            .Include(c => c.Address)
+            .FirstOrDefault(i => i.Address != null && i.Address.Id == addressId);
+    }
 }

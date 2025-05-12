@@ -12,7 +12,7 @@ public class ProductService
         _context = context;
     }
     
-    public Product CreateProduct(string? name, decimal? price, decimal? vatTax)
+    public Product CreateProduct(string? name, decimal? price, VatTax? vatTax)
     {
         if (name is null)
             throw new ArgumentNullException(nameof(name), "Name cannot be null");
@@ -27,7 +27,7 @@ public class ProductService
         return product;
     }
     
-    public Product ModifyProduct(Product product, string? name, decimal? price, decimal? vatTax)
+    public Product ModifyProduct(Product product, string? name, decimal? price, VatTax? vatTax)
     {
         if(name is not null)
             product.Name = name;
@@ -36,7 +36,7 @@ public class ProductService
             product.Price = (decimal) price;
         
         if(vatTax is not null)
-            product.VatTax = (decimal) vatTax;
+            product.VatTax = vatTax;
         
         _context.SaveChanges();
         

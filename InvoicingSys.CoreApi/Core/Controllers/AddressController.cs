@@ -23,6 +23,7 @@ public class AddressController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(Address), 200)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
     public ActionResult<Address> Post([FromBody] AddressBlueprint body)
     {
         Address? address = null;
@@ -52,6 +53,7 @@ public class AddressController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<Address>), 200)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
     public ActionResult<IEnumerable<Address>> Post([FromBody] IEnumerable<AddressBlueprint> body)
     {
         Address? address = null;
@@ -85,6 +87,7 @@ public class AddressController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<Address>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
     public ActionResult<IEnumerable<Address>> GetAddresses()
     {
         var addresses = _addressService.GetAddresses();
@@ -98,6 +101,7 @@ public class AddressController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(Address), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
     public ActionResult<Address> GetAddress([FromQuery] Guid addressId)
     {
         var address = _addressService.GetAddressById(addressId);
@@ -108,4 +112,39 @@ public class AddressController : ControllerBase
         return address;
     }
     
+    [HttpPatch("{addressId:guid}")]
+    [SwaggerOperation(Summary = "Modify an address")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(Address), 200)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    public ActionResult<Address> Patch([FromBody] AddressBlueprint body, [FromQuery] Guid addressId)
+    {
+        
+        if(addressId == Guid.Empty) return BadRequest("Id is required");
+        
+        Address? address = _addressService.GetAddressById(addressId);
+        
+        if(address is null) return NotFound("Address not found");
+
+        try
+        {
+            address = _addressService.ModifyAddress(
+                address,
+                body.LaneNumber, 
+                body.Street, 
+                body.ZipCode, 
+                body.City);
+        }
+        catch (Exception e)
+        {
+            if (e is ArgumentNullException)
+                return BadRequest(e.Message);
+
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return address;
+    }
 }

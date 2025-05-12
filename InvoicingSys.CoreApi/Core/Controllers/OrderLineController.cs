@@ -132,4 +132,40 @@ public class OrderLineController : ControllerBase
         return orderLine;
     }
     
+    [HttpPatch("{orderLineId:guid}")]
+    [SwaggerOperation(Summary = "Modify an OrderLine")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(OrderLine), 200)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+    public ActionResult<OrderLine> Patch([FromBody] OrderLineBlueprint body, [FromQuery] Guid orderLineId)
+    {
+        if(orderLineId == Guid.Empty) return BadRequest("OrderLine Id cannot be empty");
+        OrderLine? orderLine = _orderLineService.GetOrderLineById(orderLineId);
+        
+        if(orderLine is null)
+            return NotFound("OrderLine not found");
+        
+        if(orderLine.BoughtProduct is null)
+            return NotFound("Product not found");
+        
+        Product? product = _productService.GetProductById(orderLine.BoughtProduct.Id);
+        
+        try
+        {
+            orderLine = _orderLineService.ModifyOrderLine(
+                orderLine,
+                product,
+                body.Quantity);
+        }
+        catch (Exception e)
+        {
+            if (e is ArgumentNullException)
+                return BadRequest();
+
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return orderLine;
+    }
 }

@@ -17,19 +17,38 @@ public class OrderLine
     public Product? _boughtProduct;
     
     [NotNull] 
-    [Column("quantity")] 
+    [Column("quantity")]
+    [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
     [Required(ErrorMessage = "Quantity cannot be empty.")]
     public int? _quantity;
     
     [NotNull] 
-    [Column("vat_tax")] 
+    [Column("vat_tax")]
+    [Range(0, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
     [Required(ErrorMessage = "VAT Tax cannot be empty.")]
     public decimal? _vatTax;
     
     [NotNull] 
-    [Column("unit_price")] 
+    [Column("unit_price")]
+    [Range(0, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
     [Required(ErrorMessage = "UnitPrice cannot be empty.")]
     public decimal? _unitPrice;
+    
+    [Column("VAT_unit_amount")]
+    [Range(0, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
+    public decimal? _VATunitAmount;
+    
+    [Column("IAT_unit_amount")]
+    [Range(0, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
+    public decimal? _IATunitAmount;
+    
+    [Column("VAT_total_amount")]
+    [Range(0, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
+    public decimal? _VATtotalAmount;
+    
+    [Column("IAT_total_amount")]
+    [Range(0, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
+    public decimal? _IATtotalAmount;
     
     public Guid Id
     {
@@ -61,6 +80,30 @@ public class OrderLine
         set => _unitPrice = value ?? throw new ArgumentNullException(nameof(UnitPrice), "UnitPrice cannot be null");
     }
     
+    public decimal? VATunitAmount
+    {
+        get => _VATunitAmount;
+        private set => _VATunitAmount = value ?? throw new ArgumentNullException(nameof(_VATunitAmount), "VAT Unit Amount cannot be null");
+    }
+    
+    public decimal? IATunitAmount
+    {
+        get => _IATunitAmount;
+        private set => _IATunitAmount = value ?? throw new ArgumentNullException(nameof(_IATunitAmount), "IAT Unit Amount cannot be null");
+    }
+    
+    public decimal? VATtotalAmount
+    {
+        get => _VATtotalAmount;
+        private set => _VATtotalAmount = value ?? throw new ArgumentNullException(nameof(_VATtotalAmount), "VAT Total Amount cannot be null");
+    }
+    
+    public decimal? IATtotalAmount
+    {
+        get => _IATtotalAmount;
+        private set => _IATtotalAmount = value ?? throw new ArgumentNullException(nameof(_IATtotalAmount), "IAT Total Amount cannot be null");
+    }
+    
     public OrderLine()
     {
         _id = Guid.NewGuid();
@@ -73,5 +116,14 @@ public class OrderLine
         _quantity = quantity;
         _vatTax = vatTax;
         _unitPrice = unitPrice;
+        UpdateAmounts();
+    }
+
+    public void UpdateAmounts()
+    {
+        _VATunitAmount = _unitPrice;
+        _IATunitAmount = _unitPrice * (1 + _vatTax);
+        _VATtotalAmount = _quantity * _VATunitAmount;
+        _IATtotalAmount = _quantity * _IATunitAmount;
     }
 }

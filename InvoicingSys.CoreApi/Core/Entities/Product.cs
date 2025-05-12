@@ -17,14 +17,15 @@ public class Product
     public string? _name;
 
     [NotNull] 
-    [Column("price")] 
+    [Column("price")]
+    [Range(0, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
     [Required(ErrorMessage = "Price cannot be empty.")]
     public decimal? _price;
     
     [NotNull] 
-    [Column("vat_tax")] 
+    [Column("vat_tax")]
     [Required(ErrorMessage = "VAT Tax cannot be empty.")]
-    public decimal? _vatTax ;
+    public VatTax? _vatTax ;
     
     public Guid Id
     {
@@ -44,7 +45,7 @@ public class Product
         set => _price = value ?? throw new ArgumentNullException(nameof(Price), "Price cannot be null");
     }
     
-    public decimal? VatTax
+    public VatTax? VatTax
     {
         get => _vatTax;
         set => _vatTax = value ?? throw new ArgumentNullException(nameof(VatTax), "VAT Tax cannot be null");
@@ -55,7 +56,7 @@ public class Product
         _id = Guid.NewGuid();
     }
     
-    public Product(string? name, decimal? price, decimal? vatTax)
+    public Product(string? name, decimal? price, VatTax? vatTax)
     {
         _id = Guid.NewGuid();
         _name = name;

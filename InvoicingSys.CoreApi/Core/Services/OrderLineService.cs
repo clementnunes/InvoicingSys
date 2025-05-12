@@ -31,7 +31,7 @@ public class OrderLineService
         if (boughtProduct.Price is null)
             throw new ArgumentNullException(nameof(boughtProduct.Price), "Price cannot be null");
         
-        OrderLine orderLine = new OrderLine(boughtProduct, quantity, boughtProduct.VatTax, boughtProduct.Price);
+        OrderLine orderLine = new OrderLine(boughtProduct, quantity, boughtProduct.VatTax.Rate, boughtProduct.Price);
         
         _context.OrderLines.Add(orderLine);
         _context.SaveChanges();
@@ -69,10 +69,12 @@ public class OrderLineService
             orderLine.Quantity = quantity;
         
         if (boughtProduct.VatTax is not null)
-            orderLine.VatTax = boughtProduct.VatTax;
+            orderLine.VatTax = boughtProduct.VatTax.Rate;
         
         if (boughtProduct.Price is not null)
             orderLine.UnitPrice = boughtProduct.Price;
+        
+        orderLine.UpdateAmounts();
         
         _context.SaveChanges();
         

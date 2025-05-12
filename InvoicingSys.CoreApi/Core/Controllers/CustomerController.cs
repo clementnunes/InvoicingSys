@@ -148,4 +148,76 @@ public class CustomerController : ControllerBase
         return customer;
     }
     
+    [HttpGet("/codes/{code}")]
+    [SwaggerOperation(Summary = "Return Customer from CustomerCode")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(Customer), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public ActionResult<Customer> GetCustomerByCode([FromQuery] string code)
+    {
+        var customer = _customerService.GetCustomerByCode(code);
+
+        if (customer is null)
+            return NotFound("Customer not found");
+
+        return customer;
+    }
+    
+    [HttpGet("/emails/{email}")]
+    [SwaggerOperation(Summary = "Return Customer from Email")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(Customer), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public ActionResult<Customer> GetCustomerByEmail([FromQuery] string email)
+    {
+        var customer = _customerService.GetCustomerByEmail(email);
+
+        if (customer is null)
+            return NotFound("Customer not found");
+
+        return customer;
+    }
+    
+    [HttpPatch("{customerId:guid}")]
+    [SwaggerOperation(Summary = "Modify a customer")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(Customer), 200)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    public ActionResult<Customer> Patch([FromBody] CustomerBlueprint body, [FromQuery] Guid customerId)
+    {
+        
+        if(customerId == Guid.Empty) return BadRequest("Id is required");
+        
+        Customer? customer = _customerService.GetCustomerById(customerId);
+        
+        if(customer is null) return NotFound("Customer not found");
+        
+        Address? address = null;
+        
+        if(body.Address is not null)
+            address = _addressService.GetAddressById((Guid) body.Address.Id);
+
+        try
+        {
+            customer = _customerService.ModifyCustomer(
+                customer,
+                body.Code, 
+                body.FirstName, 
+                body.LastName, 
+                body.Email,
+                body.PhoneNumber,
+                address);
+        }
+        catch (Exception e)
+        {
+            if (e is ArgumentNullException)
+                return BadRequest(e.Message);
+
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return customer;
+    }
 }

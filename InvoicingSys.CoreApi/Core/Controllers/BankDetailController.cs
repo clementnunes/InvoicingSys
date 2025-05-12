@@ -22,7 +22,8 @@ public class BankDetailController : ControllerBase
     [SwaggerOperation(Summary = "Creates an bankDetail")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(BankDetail), 200)]
-    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
     public ActionResult<BankDetail> Post([FromBody] BankDetailBlueprint body)
     {
         BankDetail? bankDetail = null;
@@ -38,7 +39,7 @@ public class BankDetailController : ControllerBase
         catch (Exception e)
         {
             if (e is ArgumentNullException)
-                return BadRequest();
+                return BadRequest(e.Message);
 
             Console.WriteLine(e);
             throw;
@@ -52,6 +53,7 @@ public class BankDetailController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<BankDetail>), 200)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
     public ActionResult<IEnumerable<BankDetail>> Post([FromBody] IEnumerable<BankDetailBlueprint> body)
     {
         BankDetail? bankDetail = null;
@@ -71,7 +73,7 @@ public class BankDetailController : ControllerBase
             catch (Exception e)
             {
                 if (e is ArgumentNullException)
-                    return BadRequest();
+                    return BadRequest(e.Message);
 
                 Console.WriteLine(e);
                 throw;
@@ -85,6 +87,7 @@ public class BankDetailController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<BankDetail>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
     public ActionResult<IEnumerable<BankDetail>> GetBankDetails()
     {
         var bankDetails = _bankDetailService.GetBankDetails();
@@ -103,9 +106,44 @@ public class BankDetailController : ControllerBase
         var bankDetail = _bankDetailService.GetBankDetailById(bankDetailId);
 
         if (bankDetail is null)
-            return NotFound();
+            return NotFound("BankDetail not found");
 
         return bankDetail;
     }
     
+    [HttpPatch("{bankDetailId:guid}")]
+    [SwaggerOperation(Summary = "Modify a bankDetail")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(BankDetail), 200)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    public ActionResult<BankDetail> Patch([FromBody] BankDetailBlueprint body, [FromQuery] Guid bankDetailId)
+    {
+        
+        if(bankDetailId == Guid.Empty) return BadRequest("Id is required");
+        
+        BankDetail? bankDetail = _bankDetailService.GetBankDetailById(bankDetailId);
+        
+        if(bankDetail is null) return NotFound("BankDetail not found");
+
+        try
+        {
+            bankDetail = _bankDetailService.ModifyBankDetail(
+                bankDetail,
+                body.Location, 
+                body.OwnerName, 
+                body.Iban, 
+                body.Bic);
+        }
+        catch (Exception e)
+        {
+            if (e is ArgumentNullException)
+                return BadRequest(e.Message);
+
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return bankDetail;
+    }
 }

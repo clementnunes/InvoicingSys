@@ -80,4 +80,35 @@ public class OrderController : ControllerBase
         return order;
     }
     
+    [HttpPatch("{orderId:guid}")]
+    [SwaggerOperation(Summary = "Modify an order")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(Order), 200)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+    public ActionResult<Order> Patch([FromBody] OrderBlueprint body, [FromQuery] Guid orderId)
+    {
+        if(orderId == Guid.Empty) return BadRequest("OrderLine Id cannot be empty");
+        Order? order = _orderService.GetOrderById(orderId);
+        
+        if(order is null)
+            return NotFound("Order not found");
+        
+        try
+        {
+            order = _orderService.ModifyOrder(
+                order,
+                order.OrderLines,
+                body.OrderDate);
+        }
+        catch (Exception e)
+        {
+            if (e is ArgumentNullException)
+                return BadRequest();
+
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return order;
+    }
 }

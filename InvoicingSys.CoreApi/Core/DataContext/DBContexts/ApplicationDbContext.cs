@@ -23,4 +23,5 @@ public class ApplicationDbContext : DbContext
     public DbSet<Address> Addresses => Set<Address>();
     public DbSet<BankDetail> BankDetails => Set<BankDetail>();
     public DbSet<Invoice> Invoices => Set<Invoice>();
+    public DbSet<VatTax> VatTaxes => Set<VatTax>();
 }
