@@ -25,6 +25,8 @@ namespace InvoicingSys.CoreApi
             services.AddTransient<OrderLineService>();
             services.AddTransient<OrderService>();
             services.AddTransient<ProductService>();
+            services.AddTransient<BankDetailService>();
+            services.AddTransient<InvoiceService>();
             
             var connectionString = $"Host={Env.GetString("POSTGRES_HOST")};" +
                                    $"Port={Env.GetString("POSTGRES_PORT")};" +
