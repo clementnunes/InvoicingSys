@@ -1,6 +1,7 @@
 ﻿using InvoicingSys.CoreApi.Core.Blueprints;
 using InvoicingSys.CoreApi.Core.DataContext.DBContexts;
 using InvoicingSys.CoreApi.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace InvoicingSys.CoreApi.Core.Services;
 
@@ -73,11 +74,17 @@ public class OrderService
 
     public List<Order> GetOrders()
     {
-        return _context.Orders.ToList();
+        return _context.Orders
+            .Include(o => o.OrderLines)
+            .Include(o => o.Customer)
+            .ToList();
     }
 
     public Order? GetOrderById(Guid orderId)
     {
-        return _context.Orders.FirstOrDefault(i => i.Id == orderId);
+        return _context.Orders
+            .Include(o => o.OrderLines)
+            .Include(o => o.Customer)
+            .FirstOrDefault(i => i.Id == orderId);
     }
 }

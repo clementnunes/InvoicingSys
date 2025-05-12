@@ -14,22 +14,22 @@ public class BankDetail
     [NotNull]
     [Column("location")]
     [Required(ErrorMessage = "Location cannot be empty.")]
-    public string? _location = default!;
+    public string? _location;
     
     [NotNull]
     [Column("owner_name")]
     [Required(ErrorMessage = "OwnerName cannot be empty.")]
-    public string? _ownerName = default!;
+    public string? _ownerName;
     
     [NotNull]
     [Column("iban")]
     [Required(ErrorMessage = "IBAN cannot be empty.")]
-    public string? _iban = default!;
+    public string? _iban;
     
     [NotNull]
     [Column("bic")]
     [Required(ErrorMessage = "BIC/SWIFT cannot be empty.")]
-    public string? _bic = default!;
+    public string? _bic;
     
     public Guid Id
     {

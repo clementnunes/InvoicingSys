@@ -1,5 +1,6 @@
 ﻿using InvoicingSys.CoreApi.Core.DataContext.DBContexts;
 using InvoicingSys.CoreApi.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace InvoicingSys.CoreApi.Core.Services;
 
@@ -75,11 +76,13 @@ public class CustomerService
 
     public List<Customer> GetCustomers()
     {
-        return _context.Customers.ToList();
+        return _context.Customers.Include(c => c.Address).ToList();
     }
 
     public Customer? GetCustomerById(Guid customerId)
     {
-        return _context.Customers.FirstOrDefault(i => i.Id == customerId);
+        return _context.Customers
+            .Include(c => c.Address)
+            .FirstOrDefault(i => i.Id == customerId);
     }
 }

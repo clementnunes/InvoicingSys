@@ -14,32 +14,32 @@ public class Customer
     [NotNull]
     [Column("code")] 
     [Required(ErrorMessage = "Code cannot be empty.")]
-    public string? _code = default!;
+    public string? _code;
 
     [NotNull]
     [Column("first_name")] 
     [Required(ErrorMessage = "First Name cannot be empty.")]
-    public string? _firstName = default!;
+    public string? _firstName;
 
     [NotNull] 
     [Column("last_name")] 
     [Required(ErrorMessage = "Last Name cannot be empty.")]
-    public string? _lastName = default!;
+    public string? _lastName;
 
     [NotNull] 
     [Column("email")] 
     [Required(ErrorMessage = "Email cannot be empty.")]
-    public string? _email = default!;
+    public string? _email;
 
     [NotNull] 
     [Column("phone_number")] 
     [Required(ErrorMessage = "Phone Number cannot be empty.")]
-    public string? _phoneNumber = default!;
+    public string? _phoneNumber;
 
     [NotNull] 
     [Column("address")] 
     [Required(ErrorMessage = "Address cannot be empty.")]
-    public Address? _address = default!;
+    public Address? _address;
     
     public Guid Id
     {

@@ -14,17 +14,17 @@ public class Order
     [NotNull] 
     [Column("order_lines")] 
     [Required(ErrorMessage = "OrderLines cannot be empty.")]
-    public List<OrderLine>? _orderLines = default!;
+    public List<OrderLine>? _orderLines;
 
     [NotNull] 
     [Column("order_date")] 
     [Required(ErrorMessage = "OrderDate cannot be empty.")]
-    public DateTime? _orderDate = default!;
+    public DateTime? _orderDate;
     
     [NotNull] 
     [Column("customer")] 
     [Required(ErrorMessage = "Customer cannot be empty.")]
-    public Customer? _customer = default!;
+    public Customer? _customer;
     
     public Guid Id
     {

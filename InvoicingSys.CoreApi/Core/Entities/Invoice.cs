@@ -14,22 +14,22 @@ public class Invoice
     [NotNull] 
     [Column("order")] 
     [Required(ErrorMessage = "Order cannot be empty.")]
-    public Order? _order = default!;
+    public Order? _order;
 
     [NotNull] 
     [Column("due_date")] 
     [Required(ErrorMessage = "Due Date cannot be empty.")]
-    public DateTime? _dueDate = default!;
+    public DateTime? _dueDate;
     
     [NotNull] 
     [Column("invoicing_date")] 
     [Required(ErrorMessage = "Invoicing Date cannot be empty.")]
-    public DateTime? _invoicingDate = default!;
+    public DateTime? _invoicingDate;
     
     [NotNull] 
     [Column("bank_detail")] 
     [Required(ErrorMessage = "Bank Detail cannot be empty.")]
-    public BankDetail? _bankDetail = default!;
+    public BankDetail? _bankDetail;
     
     public Guid Id
     {

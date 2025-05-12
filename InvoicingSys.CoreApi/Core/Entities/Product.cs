@@ -14,17 +14,17 @@ public class Product
     [NotNull] 
     [Column("name")] 
     [Required(ErrorMessage = "Name cannot be empty.")]
-    public string? _name = default!;
+    public string? _name;
 
     [NotNull] 
     [Column("price")] 
     [Required(ErrorMessage = "Price cannot be empty.")]
-    public decimal? _price = default!;
+    public decimal? _price;
     
     [NotNull] 
     [Column("vat_tax")] 
     [Required(ErrorMessage = "VAT Tax cannot be empty.")]
-    public decimal? _vatTax = default!;
+    public decimal? _vatTax ;
     
     public Guid Id
     {

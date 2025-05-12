@@ -14,22 +14,22 @@ public class OrderLine
     [NotNull] 
     [Column("bought_product")] 
     [Required(ErrorMessage = "BoughtProduct cannot be empty.")]
-    public Product? _boughtProduct = default!;
+    public Product? _boughtProduct;
     
     [NotNull] 
     [Column("quantity")] 
     [Required(ErrorMessage = "Quantity cannot be empty.")]
-    public int? _quantity = default!;
+    public int? _quantity;
     
     [NotNull] 
     [Column("vat_tax")] 
     [Required(ErrorMessage = "VAT Tax cannot be empty.")]
-    public decimal? _vatTax = default!;
+    public decimal? _vatTax;
     
     [NotNull] 
     [Column("unit_price")] 
     [Required(ErrorMessage = "UnitPrice cannot be empty.")]
-    public decimal? _unitPrice = default!;
+    public decimal? _unitPrice;
     
     public Guid Id
     {

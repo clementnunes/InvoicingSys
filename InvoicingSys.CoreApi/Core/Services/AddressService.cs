@@ -1,5 +1,6 @@
 ﻿using InvoicingSys.CoreApi.Core.DataContext.DBContexts;
 using InvoicingSys.CoreApi.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace InvoicingSys.CoreApi.Core.Services;
 

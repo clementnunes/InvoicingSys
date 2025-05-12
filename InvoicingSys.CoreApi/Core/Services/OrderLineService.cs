@@ -2,6 +2,7 @@
 using InvoicingSys.CoreApi.Core.Blueprints;
 using InvoicingSys.CoreApi.Core.DataContext.DBContexts;
 using InvoicingSys.CoreApi.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace InvoicingSys.CoreApi.Core.Services;
 
@@ -87,12 +88,16 @@ public class OrderLineService
 
     public List<OrderLine> GetOrderLines()
     {
-        return _context.OrderLines.ToList();
+        return _context.OrderLines
+            .Include(o => o.BoughtProduct)
+            .ToList();
     }
 
     public OrderLine? GetOrderLineById(Guid orderLineId)
     {
-        return _context.OrderLines.FirstOrDefault(i => i.Id == orderLineId);
+        return _context.OrderLines
+            .Include(o => o.BoughtProduct)
+            .FirstOrDefault(i => i.Id == orderLineId);
     }
     
     public bool IsValidOrderLine(OrderLineBlueprint orderLineBlueprint)
