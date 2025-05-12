@@ -14,22 +14,22 @@ public class Address
     [NotNull]
     [Column("lane_number")]
     [Required(ErrorMessage = "LaneNumber cannot be empty.")]
-    public string? _laneNumber = default!;
+    public string? _laneNumber;
     
     [NotNull]
     [Column("street")]
     [Required(ErrorMessage = "Street cannot be empty.")]
-    public string? _street = default!;
+    public string? _street;
     
     [NotNull]
     [Column("zip_code")]
     [Required(ErrorMessage = "ZipCode cannot be empty.")]
-    public string? _zipCode = default!;
+    public string? _zipCode;
     
     [NotNull]
     [Column("city")]
     [Required(ErrorMessage = "City cannot be empty.")]
-    public string? _city = default!;
+    public string? _city;
     
     public Guid Id
     {
